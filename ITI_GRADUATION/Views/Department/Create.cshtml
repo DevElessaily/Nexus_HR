@@ -1,0 +1,38 @@
+﻿@model ITI_GRADUATION.Models.Department
+
+@{
+    ViewData["Title"] = "Add Department";
+    ViewData["BgImage"] = "https://images.unsplash.com/photo-1745015446589-7ee6f702d8c1?auto=format&fit=crop&w=1920&q=80";
+}
+
+<div class="nx-page-header">
+    <div>
+        <div class="nx-eyebrow">Departments</div>
+        <h2 class="mb-0">Add Department</h2>
+    </div>
+    <a asp-action="Index" class="btn btn-nx-outline"><i class="fa-solid fa-arrow-left me-1"></i> Back to list</a>
+</div>
+
+<div class="nx-card" style="max-width: 520px;">
+    <div class="nx-card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="nx-form-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="e.g. Human Resources" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-nx-primary"><i class="fa-solid fa-check me-1"></i> Save Department</button>
+                <a asp-action="Index" class="btn btn-nx-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

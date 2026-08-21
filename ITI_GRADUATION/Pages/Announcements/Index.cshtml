@@ -1,0 +1,55 @@
+﻿@page
+@model ITI_GRADUATION.Pages.Announcements.IndexModel
+
+@{
+    ViewData["Title"] = "Announcements";
+    ViewData["BgImage"] = "https://images.unsplash.com/photo-1741636174186-3fffe1614c39?auto=format&fit=crop&w=1920&q=80";
+}
+
+<div class="nx-page-header">
+    <div>
+        <div class="nx-eyebrow">Company Board</div>
+        <h2 class="mb-1">Announcements</h2>
+        <p class="text-muted mb-0">@Model.Announcements.Count announcement(s) &mdash; this whole feature is a Razor Page, not MVC</p>
+    </div>
+    <a asp-page="./Create" class="btn btn-nx-primary"><i class="fa-solid fa-plus me-1"></i> New Announcement</a>
+</div>
+
+<div class="nx-card">
+    @if (Model.Announcements.Any())
+    {
+        <div class="table-responsive">
+            <table class="table nx-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Posted On</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model.Announcements)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@a.Title</td>
+                            <td>@a.PostedOn.ToString("dd MMM yyyy, HH:mm")</td>
+                            <td class="text-end">
+                                <a asp-page="./Details" asp-route-id="@a.Id" class="btn btn-sm btn-nx-outline" title="Details"><i class="fa-regular fa-eye"></i></a>
+                                <a asp-page="./Edit" asp-route-id="@a.Id" class="btn btn-sm btn-nx-outline" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <a asp-page="./Delete" asp-route-id="@a.Id" class="btn btn-sm btn-nx-outline text-danger" title="Delete"><i class="fa-regular fa-trash-can"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="nx-empty">
+            <i class="fa-solid fa-bullhorn"></i>
+            <p class="mb-3">No announcements posted yet.</p>
+            <a asp-page="./Create" class="btn btn-nx-primary">Post the first one</a>
+        </div>
+    }
+</div>

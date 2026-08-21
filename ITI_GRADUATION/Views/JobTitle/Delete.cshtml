@@ -1,0 +1,44 @@
+﻿@model ITI_GRADUATION.Models.JobTitle
+
+@{
+    ViewData["Title"] = "Delete Job Title";
+    ViewData["BgImage"] = "https://images.unsplash.com/photo-1639018868033-f501b5a521bd?auto=format&fit=crop&w=1920&q=80";
+}
+
+<div class="nx-page-header">
+    <div>
+        <div class="nx-eyebrow">Job Titles</div>
+        <h2 class="mb-0">Delete Job Title</h2>
+    </div>
+    <a asp-action="Index" class="btn btn-nx-outline"><i class="fa-solid fa-arrow-left me-1"></i> Back to list</a>
+</div>
+
+<div class="nx-card" style="max-width: 560px;">
+    <div class="nx-card-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="nx-stat-icon" style="background:var(--nx-danger-soft); color:var(--nx-danger);">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+                <h5 class="mb-0">Are you sure?</h5>
+                <div class="text-muted small">This action cannot be undone.</div>
+            </div>
+        </div>
+
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="p-3 mb-3" style="background:#F8FAFC; border-radius:10px;">
+            <div class="fw-semibold">@Model.Title</div>
+            <div class="text-muted small">@(Model.Employees?.Count ?? 0) employee(s) currently hold this job title</div>
+        </div>
+
+        <form asp-action="Delete" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-nx-danger"><i class="fa-regular fa-trash-can me-1"></i> Confirm Delete</button>
+                <a asp-action="Index" class="btn btn-nx-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

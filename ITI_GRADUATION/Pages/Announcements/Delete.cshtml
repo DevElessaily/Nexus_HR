@@ -1,0 +1,43 @@
+﻿@page "{id:int}"
+@model ITI_GRADUATION.Pages.Announcements.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Announcement";
+    ViewData["BgImage"] = "https://images.unsplash.com/photo-1741636174186-3fffe1614c39?auto=format&fit=crop&w=1920&q=80";
+}
+
+<div class="nx-page-header">
+    <div>
+        <div class="nx-eyebrow">Company Board</div>
+        <h2 class="mb-0">Delete Announcement</h2>
+    </div>
+    <a asp-page="./Index" class="btn btn-nx-outline"><i class="fa-solid fa-arrow-left me-1"></i> Back to list</a>
+</div>
+
+<div class="nx-card" style="max-width: 560px;">
+    <div class="nx-card-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="nx-stat-icon" style="background:var(--nx-danger-soft); color:var(--nx-danger);">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+                <h5 class="mb-0">Are you sure?</h5>
+                <div class="text-muted small">This action cannot be undone.</div>
+            </div>
+        </div>
+
+        <div class="p-3 mb-3" style="background:#F8FAFC; border-radius:10px;">
+            <div class="fw-semibold">@Model.Announcement.Title</div>
+            <div class="text-muted small">Posted @Model.Announcement.PostedOn.ToString("dd MMM yyyy")</div>
+        </div>
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Announcement.Id" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-nx-danger"><i class="fa-regular fa-trash-can me-1"></i> Confirm Delete</button>
+                <a asp-page="./Index" class="btn btn-nx-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

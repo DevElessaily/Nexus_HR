@@ -1,0 +1,109 @@
+﻿@model ITI_GRADUATION.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["BgImage"] = "https://images.unsplash.com/photo-1755436612913-b1e2cfd66e66?auto=format&fit=crop&w=1920&q=80";
+}
+
+<div class="nx-page-header">
+    <div>
+        <div class="nx-eyebrow">Overview</div>
+        <h2 class="mb-1">Welcome back</h2>
+        <p class="text-muted mb-0">Here's what's happening across your organization today.</p>
+    </div>
+    <a asp-controller="Employee" asp-action="Create" class="btn btn-nx-primary">
+        <i class="fa-solid fa-plus me-1"></i> Add Employee
+    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="nx-card nx-stat-card h-100">
+            <div class="nx-stat-icon" style="background:var(--nx-accent-soft); color:var(--nx-accent-dark);">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+                <div class="nx-stat-value">@Model.TotalEmployees</div>
+                <div class="nx-stat-label">Total Employees</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="nx-card nx-stat-card h-100">
+            <div class="nx-stat-icon" style="background:var(--nx-info-soft); color:var(--nx-info);">
+                <i class="fa-solid fa-building"></i>
+            </div>
+            <div>
+                <div class="nx-stat-value">@Model.TotalDepartments</div>
+                <div class="nx-stat-label">Departments</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="nx-card nx-stat-card h-100">
+            <div class="nx-stat-icon" style="background:var(--nx-warning-soft); color:var(--nx-warning);">
+                <i class="fa-solid fa-id-badge"></i>
+            </div>
+            <div>
+                <div class="nx-stat-value">@Model.TotalJobTitles</div>
+                <div class="nx-stat-label">Job Titles</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="nx-card">
+    <div class="nx-card-body">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="mb-0">Recently Hired</h5>
+            <a asp-controller="Employee" asp-action="Index" class="small">View all employees &rarr;</a>
+        </div>
+
+        @if (Model.RecentEmployees.Any())
+        {
+            <div class="table-responsive">
+                <table class="table nx-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Department</th>
+                            <th>Job Title</th>
+                            <th>Hire Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var emp in Model.RecentEmployees)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <avatar name="@emp.FullName" image="@emp.ProfileImagePath"></avatar>
+                                        <div>
+                                            <div class="fw-semibold">@emp.FullName</div>
+                                            <div class="text-muted small">@emp.Email</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@(emp.Department?.Name ?? "—")</td>
+                                <td>@(emp.JobTitle?.Title ?? "—")</td>
+                                <td>@emp.HireDate.ToString("dd MMM yyyy")</td>
+                                <td class="text-end">
+                                    <a asp-controller="Employee" asp-action="Details" asp-route-id="@emp.Id" class="btn btn-sm btn-nx-outline">View</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="nx-empty">
+                <i class="fa-solid fa-user-plus"></i>
+                <p class="mb-3">No employees yet. Add your first one to get started.</p>
+                <a asp-controller="Employee" asp-action="Create" class="btn btn-nx-primary">Add Employee</a>
+            </div>
+        }
+    </div>
+</div>

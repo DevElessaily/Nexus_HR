@@ -1,0 +1,83 @@
+﻿@model ITI_GRADUATION.Models.Employee
+
+@{
+    ViewData["Title"] = "Add Employee";
+    ViewData["BgImage"] = "https://images.unsplash.com/photo-1758873269276-9518d0cb4a0b?auto=format&fit=crop&w=1920&q=80";
+}
+
+<div class="nx-page-header">
+    <div>
+        <div class="nx-eyebrow">Employees</div>
+        <h2 class="mb-0">Add Employee</h2>
+    </div>
+    <a asp-action="Index" class="btn btn-nx-outline"><i class="fa-solid fa-arrow-left me-1"></i> Back to list</a>
+</div>
+
+<div class="nx-card">
+    <div class="nx-card-body">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="FullName" class="nx-form-label"></label>
+                    <input asp-for="FullName" class="form-control" placeholder="e.g. Sarah Ahmed" />
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="nx-form-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="name@company.com" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="PhoneNumber" class="nx-form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="+20 1xx xxx xxxx" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="HireDate" class="nx-form-label"></label>
+                    <input asp-for="HireDate" class="form-control" type="date" />
+                    <span asp-validation-for="HireDate" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="DepartmentId" class="nx-form-label"></label>
+                    <select asp-for="DepartmentId" asp-items="ViewBag.DepartmentId as SelectList" class="form-select">
+                        <option value="">Select a department…</option>
+                    </select>
+                    <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="JobTitleId" class="nx-form-label"></label>
+                    <select asp-for="JobTitleId" asp-items="ViewBag.JobTitleId as SelectList" class="form-select">
+                        <option value="">Select a job title…</option>
+                    </select>
+                    <span asp-validation-for="JobTitleId" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Salary" class="nx-form-label"></label>
+                    <input asp-for="Salary" class="form-control" placeholder="0.00" />
+                    <span asp-validation-for="Salary" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ProfileImageFile" class="nx-form-label">Profile Image</label>
+                    <input asp-for="ProfileImageFile" class="form-control" type="file" accept=".jpg,.jpeg,.png,.gif" />
+                    <span asp-validation-for="ProfileImageFile" class="text-danger small"></span>
+                    <div class="form-text">JPG, PNG or GIF, up to 2 MB.</div>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-nx-primary"><i class="fa-solid fa-check me-1"></i> Save Employee</button>
+                <a asp-action="Index" class="btn btn-nx-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

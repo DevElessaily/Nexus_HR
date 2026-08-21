@@ -1,0 +1,153 @@
+﻿@model ITI_GRADUATION.Models.EmployeeIndexViewModel
+
+@{
+    ViewData["Title"] = "Employees";
+    ViewData["BgImage"] = "https://images.unsplash.com/photo-1758873269276-9518d0cb4a0b?auto=format&fit=crop&w=1920&q=80";
+}
+
+<div class="nx-page-header">
+    <div>
+        <div class="nx-eyebrow">Directory</div>
+        <h2 class="mb-1">Employees</h2>
+        <p class="text-muted mb-0">@Model.Employees.TotalCount employee(s) found</p>
+    </div>
+    <a asp-action="Create" class="btn btn-nx-primary">
+        <i class="fa-solid fa-plus me-1"></i> Add Employee
+    </a>
+</div>
+
+<div class="nx-card mb-3">
+    <div class="nx-card-body pb-3">
+        <form asp-action="Index" method="get" class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <label class="nx-form-label">Search</label>
+                <input type="text" name="searchString" value="@Model.SearchString" class="form-control" placeholder="Search by name or email…" />
+            </div>
+            <div class="col-md-3">
+                <label class="nx-form-label">Department</label>
+                <select name="departmentId" class="form-select">
+                    <option value="">All Departments</option>
+                    @foreach (var dept in Model.Departments)
+                    {
+                        <option value="@dept.Id" selected="@(Model.DepartmentId == dept.Id)">@dept.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="nx-form-label">Job Title</label>
+                <select name="jobTitleId" class="form-select">
+                    <option value="">All Job Titles</option>
+                    @foreach (var job in Model.JobTitles)
+                    {
+                        <option value="@job.Id" selected="@(Model.JobTitleId == job.Id)">@job.Title</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-nx-primary w-100"><i class="fa-solid fa-filter"></i></button>
+            </div>
+        </form>
+        @if (!string.IsNullOrWhiteSpace(Model.SearchString) || Model.DepartmentId.HasValue || Model.JobTitleId.HasValue)
+        {
+            <div class="mt-2">
+                <a asp-action="Index" class="small text-muted"><i class="fa-solid fa-xmark me-1"></i>Clear filters</a>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="nx-card">
+    @if (Model.Employees.Any())
+    {
+        <div class="table-responsive">
+            <table class="table nx-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th>Job Title</th>
+                        <th>Hire Date</th>
+                        <th>Salary</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var emp in Model.Employees)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    @if (!string.IsNullOrEmpty(emp.ProfileImagePath))
+                                    {
+                                        <button type="button" class="nx-avatar-btn" onclick="event.stopPropagation(); openLightbox('@emp.ProfileImagePath')" title="Click to view full size">
+                                            <avatar name="@emp.FullName" image="@emp.ProfileImagePath"></avatar>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <avatar name="@emp.FullName" image="@emp.ProfileImagePath"></avatar>
+                                    }
+                                    <div>
+                                        <div class="fw-semibold">@emp.FullName</div>
+                                        <div class="text-muted small">@emp.Email</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="nx-badge">@(emp.Department?.Name ?? "—")</span></td>
+                            <td>@(emp.JobTitle?.Title ?? "—")</td>
+                            <td>@emp.HireDate.ToString("dd MMM yyyy")</td>
+                            <td>@emp.Salary.ToString("C")</td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@emp.Id" class="btn btn-sm btn-nx-outline" title="Details"><i class="fa-regular fa-eye"></i></a>
+                                <a asp-action="Edit" asp-route-id="@emp.Id" class="btn btn-sm btn-nx-outline" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <a asp-action="Delete" asp-route-id="@emp.Id" class="btn btn-sm btn-nx-outline text-danger" title="Delete"><i class="fa-regular fa-trash-can"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.Employees.TotalPages > 1)
+        {
+            <div class="d-flex justify-content-center py-3">
+                <ul class="nx-pagination">
+                    <li class="@(!Model.Employees.HasPreviousPage ? "disabled" : "")">
+                        @if (Model.Employees.HasPreviousPage)
+                        {
+                            <a asp-action="Index" asp-route-pageNumber="@(Model.Employees.PageIndex - 1)" asp-route-searchString="@Model.SearchString" asp-route-departmentId="@Model.DepartmentId" asp-route-jobTitleId="@Model.JobTitleId"><i class="fa-solid fa-chevron-left"></i></a>
+                        }
+                        else
+                        {
+                            <span><i class="fa-solid fa-chevron-left"></i></span>
+                        }
+                    </li>
+                    @for (var i = 1; i <= Model.Employees.TotalPages; i++)
+                    {
+                        <li class="@(i == Model.Employees.PageIndex ? "active" : "")">
+                            <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchString="@Model.SearchString" asp-route-departmentId="@Model.DepartmentId" asp-route-jobTitleId="@Model.JobTitleId">@i</a>
+                        </li>
+                    }
+                    <li class="@(!Model.Employees.HasNextPage ? "disabled" : "")">
+                        @if (Model.Employees.HasNextPage)
+                        {
+                            <a asp-action="Index" asp-route-pageNumber="@(Model.Employees.PageIndex + 1)" asp-route-searchString="@Model.SearchString" asp-route-departmentId="@Model.DepartmentId" asp-route-jobTitleId="@Model.JobTitleId"><i class="fa-solid fa-chevron-right"></i></a>
+                        }
+                        else
+                        {
+                            <span><i class="fa-solid fa-chevron-right"></i></span>
+                        }
+                    </li>
+                </ul>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="nx-empty">
+            <i class="fa-solid fa-user-slash"></i>
+            <p class="mb-3">No employees match your search.</p>
+            <a asp-action="Index" class="btn btn-nx-outline">Clear filters</a>
+        </div>
+    }
+</div>

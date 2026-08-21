@@ -1,0 +1,83 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+    var isAnnouncementsPage = currentPage.StartsWith("/Announcements");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · Nexus HR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+@{
+    var bgImage = ViewData["BgImage"] as string;
+    var bodyStyle = string.IsNullOrEmpty(bgImage) ? "" : $"--page-bg: url('{bgImage}');";
+}
+<body style="@bodyStyle">
+    <div class="nx-app">
+        <aside class="nx-sidebar" id="nxSidebar">
+            <div class="nx-brand">
+                <span class="nx-brand-mark">N</span>
+                <span>Nexus HR</span>
+            </div>
+            <nav class="nx-nav">
+                <a class="nx-nav-link @(currentController == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                    <i class="fa-solid fa-gauge"></i> Dashboard
+                </a>
+                <a class="nx-nav-link @(currentController == "Employee" ? "active" : "")" asp-controller="Employee" asp-action="Index">
+                    <i class="fa-solid fa-users"></i> Employees
+                </a>
+                <a class="nx-nav-link @(currentController == "Department" ? "active" : "")" asp-controller="Department" asp-action="Index">
+                    <i class="fa-solid fa-building"></i> Departments
+                </a>
+                <a class="nx-nav-link @(currentController == "JobTitle" ? "active" : "")" asp-controller="JobTitle" asp-action="Index">
+                    <i class="fa-solid fa-id-badge"></i> Job Titles
+                </a>
+                <a class="nx-nav-link @(isAnnouncementsPage ? "active" : "")" asp-page="/Announcements/Index">
+                    <i class="fa-solid fa-bullhorn"></i> Announcements
+                </a>
+            </nav>
+            <div class="nx-sidebar-footer">
+                &copy; @DateTime.Now.Year Nexus HR
+            </div>
+        </aside>
+
+        <div class="nx-main">
+            <header class="nx-topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-sm btn-nx-outline d-md-none" onclick="document.getElementById('nxSidebar').classList.toggle('nx-open')">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <span class="nx-topbar-title">@ViewData["Title"]</span>
+                </div>
+                <a asp-controller="Home" asp-action="Privacy" class="text-muted small">Privacy</a>
+            </header>
+
+            <main class="nx-content">
+                @RenderBody()
+            </main>
+
+            <footer class="nx-footer">
+                Nexus HR &mdash; Employee Management System
+            </footer>
+        </div>
+    </div>
+
+    <!-- Full-screen lightbox used to view an employee's profile photo at full size -->
+    <div id="nxLightbox" class="nx-lightbox" onclick="closeLightbox()">
+        <button type="button" class="nx-lightbox-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+        <img id="nxLightboxImg" src="" alt="Profile photo" onclick="event.stopPropagation()" />
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

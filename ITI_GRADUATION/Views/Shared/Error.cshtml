@@ -1,0 +1,36 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="nx-card" style="max-width: 640px;">
+    <div class="nx-card-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="nx-stat-icon" style="background:var(--nx-danger-soft); color:var(--nx-danger);">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+                <h4 class="mb-0">Something went wrong</h4>
+                <div class="text-muted small">An error occurred while processing your request.</div>
+            </div>
+        </div>
+
+        @if (Model.ShowRequestId)
+        {
+            <p class="small text-muted"><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
+        }
+
+        <hr />
+
+        <h6>Development Mode</h6>
+        <p class="text-muted small">
+            Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
+        </p>
+        <p class="text-muted small mb-0">
+            <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
+            It can result in displaying sensitive information from exceptions to end users.
+            For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
+            and restarting the app.
+        </p>
+    </div>
+</div>
