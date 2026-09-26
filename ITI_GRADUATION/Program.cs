@@ -20,6 +20,15 @@ var app = builder.Build();
 var uploadsPath = Path.Combine(app.Environment.WebRootPath, "uploads", "employees");
 Directory.CreateDirectory(uploadsPath);
 
+// Apply any pending EF migrations, then seed starter data (departments, job
+// titles, employees with profile images, announcements) if the DB is empty.
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.MigrateAsync();
+    await DbSeeder.SeedAsync(dbContext);
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

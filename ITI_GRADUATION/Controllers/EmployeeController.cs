@@ -14,7 +14,7 @@ namespace ITI_GRADUATION.Controllers
         private readonly IEmailService _emailService;
         private const int PageSize = 5;
 
-        private static readonly string[] AllowedImageExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+        private static readonly string[] AllowedImageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
         private const long MaxImageSizeBytes = 2 * 1024 * 1024; // 2 MB
 
         public EmployeeController(AppDbContext context, IWebHostEnvironment environment, IEmailService emailService)
@@ -218,7 +218,7 @@ namespace ITI_GRADUATION.Controllers
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!AllowedImageExtensions.Contains(extension))
             {
-                ModelState.AddModelError("ProfileImageFile", "Only .jpg, .jpeg, .png and .gif images are allowed.");
+                ModelState.AddModelError("ProfileImageFile", "Only .jpg, .jpeg, .png, .gif and .webp images are allowed.");
                 return null;
             }
 
